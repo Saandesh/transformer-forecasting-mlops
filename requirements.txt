@@ -1,0 +1,10 @@
+torch
+numpy
+pandas
+matplotlib
+scikit-learn
+yfinance
+streamlit
+fastapi
+uvicorn
+mlflow

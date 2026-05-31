@@ -1,3 +1,5 @@
+import mlflow
+import mlflow.pytorch
 import torch
 import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
@@ -37,6 +39,22 @@ optimizer = torch.optim.Adam(
 # Training
 epochs = 20
 
+mlflow.set_experiment(
+    "Transformer Stock Forecasting"
+)
+
+with mlflow.start_run():
+
+    mlflow.log_param(
+        "epochs",
+        epochs
+    )
+
+    mlflow.log_param(
+        "learning_rate",
+        0.001
+    )
+
 for epoch in range(epochs):
 
     model.train()
@@ -59,6 +77,12 @@ for epoch in range(epochs):
 
     print(f"Epoch {epoch+1}/{epochs}, Loss: {epoch_loss:.6f}")
 
+mlflow.log_metric(
+    "loss",
+    epoch_loss,
+    step=epoch
+)
+
 # Save model
 torch.save(
     model.state_dict(),
@@ -66,3 +90,8 @@ torch.save(
 )
 
 print("Model saved successfully!")
+
+mlflow.pytorch.log_model(
+    model,
+    "transformer-model"
+)
